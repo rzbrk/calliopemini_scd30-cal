@@ -24,9 +24,9 @@ let startTime = 0
 let scd30_calibrate = false
 let runMaxSeconds = 0
 // runMaxSeconds is the maximum time in seconds the program is allowed to run.
-runMaxSeconds = 120
+runMaxSeconds = 60
 scd30_calibrate = false
-let samplingRateSeconds = 10
+let samplingRateSeconds = 5
 let firstLoop = true
 basic.showIcon(IconNames.Asleep)
 basic.forever(function () {
