@@ -26,11 +26,20 @@ let runMaxSeconds = 0
 // runMaxSeconds is the maximum time in seconds the program is allowed to run.
 runMaxSeconds = 120
 scd30_calibrate = false
-let SamplingRateSeconds = 10
+let samplingRateSeconds = 10
+let firstLoop = true
 basic.showIcon(IconNames.Asleep)
 basic.forever(function () {
     if (runProgram) {
         now = control.millis()
+        // Output sensor version and initial calibration value only at the beginning (first loop)
+        if (firstLoop == true) {
+            firstLoop = false
+            serial.writeLine("SCD30 sensor version: " + SCD30.getVersion())
+            serial.writeLine("CO2 calibration value: " + SCD30.getCalibration() + " ppm")
+            serial.writeLine("")
+            control.waitMicros(1000)
+        }
         if (scd30_calibrate == true) {
             scd30_calibrate = false
             serial.writeLine("Perform calibration . . .")
@@ -38,15 +47,13 @@ basic.forever(function () {
             serial.writeLine("CO2 calibration value: " + SCD30.getCalibration() + " ppm")
             serial.writeLine("")
         } else {
-            serial.writeLine("SCD30 sensor version: " + SCD30.getVersion())
             serial.writeLine("CO2: " + SCD30.readCO2() + " ppm")
-            serial.writeLine("CO2 calibration value: " + SCD30.getCalibration() + " ppm")
             serial.writeLine("Temperature: " + SCD30.readTemperature() + " degrees")
             serial.writeLine("Humidity: " + SCD30.readHumidity() + " percent")
             serial.writeLine("")
         }
         led.toggle(2, 2)
-        while (control.millis() - now < SamplingRateSeconds * 1000) {
+        while (control.millis() - now < samplingRateSeconds * 1000) {
         	
         }
         checkTimeout()
