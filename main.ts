@@ -17,7 +17,6 @@ serial.onDataReceived(serial.delimiters(Delimiters.NewLine), function () {
         startTime = control.millis()
     }
 })
-let temp2 = 0
 let now = 0
 let SERIAL_RECEIVED = ""
 let runProgram = false
@@ -25,8 +24,9 @@ let startTime = 0
 let scd30_calibrate = false
 let runMaxSeconds = 0
 // runMaxSeconds is the maximum time in seconds the program is allowed to run.
-runMaxSeconds = 60
+runMaxSeconds = 120
 scd30_calibrate = false
+let SamplingRateSeconds = 10
 basic.showIcon(IconNames.Asleep)
 basic.forever(function () {
     if (runProgram) {
@@ -46,10 +46,9 @@ basic.forever(function () {
             serial.writeLine("")
         }
         led.toggle(2, 2)
-        while (control.millis() - now < 3000) {
+        while (control.millis() - now < SamplingRateSeconds * 1000) {
         	
         }
-        temp2 = input.temperature()
         checkTimeout()
     }
 })
